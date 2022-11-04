@@ -1,0 +1,7 @@
+name = "ReinforcedSnake"
+uuid = "6e4a5d7c-cf5a-4fb7-bf17-26e7ab6a80e1"
+authors = ["David Mašek"]
+version = "0.1.0"
+
+[compat]
+julia = "1.8"
