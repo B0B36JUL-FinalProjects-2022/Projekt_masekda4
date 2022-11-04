@@ -6,7 +6,7 @@ Reinforcement learning algorithms demonstrated on classic Snake.
 
 The package is not registered and this can be installed in the following way
 
-```julia
+```
 (env) pkg> add https://github.com/B0B36JUL-FinalProjects-2022/Projekt_masekda4
 ```
 
