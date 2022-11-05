@@ -1,8 +1,7 @@
 module ReinforcedSnake
 
-# Write your package code here.
-export add
+export SnakeGame, Action
 
-add(a::Real, b::Real) = a + b
+include("snake.jl")
 
 end
