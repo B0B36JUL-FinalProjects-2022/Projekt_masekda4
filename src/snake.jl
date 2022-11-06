@@ -1,3 +1,6 @@
+
+export SnakeGame, reset!, step!, Action, UP, DOWN, RIGHT, LEFT, STATE_SPACE, ACTION_SPACE
+
 Point = CartesianIndex{2}
 Direction = CartesianIndex{2}
 Action = Direction

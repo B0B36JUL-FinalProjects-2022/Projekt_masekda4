@@ -1,3 +1,5 @@
+export BanditsEnv
+
 """
 Environment with a single state and N actions.
 """

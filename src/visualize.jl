@@ -1,3 +1,5 @@
+export display_game!
+
 function sprint_action(env::SnakeGame, action::Integer)::String
     action = env.ACTION_SPACE[action]
     if action == UP

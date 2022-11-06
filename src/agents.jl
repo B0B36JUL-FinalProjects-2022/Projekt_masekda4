@@ -1,6 +1,8 @@
 using Statistics
 using Printf
 
+export MonteCarloAgent, QLearningAgent, SarsaAgent, OnlineAgent, train!, evaluate_on_episode!, choose_action
+
 """
 Table based Monte Carlo agent.
 
