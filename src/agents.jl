@@ -9,7 +9,7 @@ Table based Monte Carlo agent.
 # Examples
 ```julia-repl
 julia> MonteCarloAgent(1:2,["noop","go"])
-MonteCarloAgent(Real[0.0 0.0; 0.0 0.0], Integer[0 0; 0 0])
+MonteCarloAgent([0.0 0.0; 0.0 0.0], [0.0 0.0; 0.0 0.0])
 ```
 """
 struct MonteCarloAgent 
