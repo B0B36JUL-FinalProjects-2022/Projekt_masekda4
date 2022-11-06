@@ -10,7 +10,7 @@ const DOWN = Direction(1, 0)
 const LEFT = Direction(0, -1)
 const RIGHT = Direction(0, 1)
 
-"""Returns index of random `false` value or `nothing` if none found.""" 
+"""Return index of random `false` value or `nothing` if none found.""" 
 function find_empty(arr::BitMatrix)::Union{CartesianIndex{2}, Nothing}
     valid_indices = CartesianIndex{2}[]
     for idx in CartesianIndices(arr)
@@ -30,13 +30,13 @@ end
 SnakeGame environment. Must be initialized by `reset!(env)` before first usage.
 """
 mutable struct SnakeGame
-    "height"
+    "board height"
     const H::Integer
-    "width"
+    "board width"
     const W::Integer
-    "Observable states, see `get_state`"
+    "observable states, see `get_state`"
     const STATE_SPACE
-    "The possible actions are UP, DOWN, LEFT and RIGHT"
+    "the possible actions are UP, DOWN, LEFT and RIGHT"
     const ACTION_SPACE
     "is set to `true` after first reset"
     initialized::Bool
@@ -154,7 +154,7 @@ end
 """
     step!(game::SnakeGame, action::Direction)::Tuple{Integer, Real, Bool}
 
-Move one step in the environment with the given action. Returns (next_state, reward, done).
+Move one step in the environment with the given action. Return (next_state, reward, done).
 """
 function step!(game::SnakeGame, action::Direction)::Tuple{Integer, Real, Bool}
     next = game.head + action
@@ -185,7 +185,7 @@ end
 """
     step!(game::SnakeGame, action::Integer)::Tuple{Integer, Real, Bool}
 
-Move one step in the environment with the action given by index `action`. Returns (next_state, reward, done).
+Move one step in the environment with the action given by index `action`. Return (next_state, reward, done).
 
 Equivalent to `step!(game, ACTION_SPACE[action])`.
 """
