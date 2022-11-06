@@ -55,7 +55,7 @@ function choose_action(agent, state)::Integer
 end
 
 function train_step!(agent::QLearningAgent, state, action, reward, next_state, next_action, done, alpha)
-    agent.Q[state, action] += alpha * (reward + Integer(!done) * max(agent.Q[next_state]) - agent.Q[state, action])
+    agent.Q[state, action] += alpha * (reward + Integer(!done) * maximum(agent.Q[next_state, :]) - agent.Q[state, action])
 end
 
 function train_step!(agent::SarsaAgent, state, action, reward, next_state, next_action, done, alpha)

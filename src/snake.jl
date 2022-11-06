@@ -1,5 +1,5 @@
 
-export SnakeGame, reset!, step!, UP, DOWN, RIGHT, LEFT, STATE_SPACE, ACTION_SPACE
+export SnakeGame, reset!, step!, UP, DOWN, RIGHT, LEFT, STATE_SPACE, ACTION_SPACE, print_board
 
 Point = CartesianIndex{2}
 Direction = CartesianIndex{2}
@@ -96,7 +96,7 @@ function reset!(env::SnakeGame)::Integer
     return get_state(env)
 end
 
-function print_board(io::IO, game::SnakeGame)
+function print_board(io::IO, game::SnakeGame; separator="\n")
     if !game.initialized
         print(io, "SnakeGame($(game.H), $(game.W), false)")
         return
@@ -115,11 +115,11 @@ function print_board(io::IO, game::SnakeGame)
                 print(io, ' ')
             end
         end
-        print(io, '\n')
+        print(io, separator)
     end
 end
 
-print_board(game::SnakeGame) = print_board(stdout, game)
+print_board(game::SnakeGame; separator="\n") = print_board(stdout, game; separator="\n")
 
 function Base.show(io::IO, game::SnakeGame)
     print_board(io, game)
