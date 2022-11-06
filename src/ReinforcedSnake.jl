@@ -1,6 +1,6 @@
 module ReinforcedSnake
 
-export SnakeGame, Action
+export SnakeGame, Action, reset!, step!, UP, DOWN, RIGHT, LEFT
 
 include("snake.jl")
 

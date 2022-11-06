@@ -32,6 +32,8 @@ mutable struct SnakeGame
     const H::Integer
     "width"
     const W::Integer
+    "set to `true` after first reset"
+    initialized::Bool
     "tiles blocked with obstacles"
     blocks::BitMatrix
     "tiles occupied by snake body (including head)"
@@ -45,16 +47,18 @@ mutable struct SnakeGame
     "apple (food) location"
     apple::Point
     function SnakeGame(H::Integer = 6, W::Integer = 12)
-        return new(H, W)
+        return new(H, W, false)
     end
 end
 
 """
     reset(env::SnakeGame)
 
-Reset environment to random valid starting state.
+Reset environment to random valid starting state. Returns current (observed) state.
 """
 function reset!(env::SnakeGame)
+    env.initialized = true
+
     env.blocks = falses(env.H, env.W)
     env.blocks[1, :] .= true
     env.blocks[end, :] .= true
@@ -72,24 +76,30 @@ function reset!(env::SnakeGame)
     env.body[env.tail] = true
 
     env.apple = find_empty(env.blocks .| env.body)
+
+    return get_state(env)
 end
 
 function print_board(io::IO, game::SnakeGame)
+    if !game.initialized
+        print(io, "SnakeGame($(game.H), $(game.W), false)")
+        return
+    end
     for y in 1:game.H
         for x in 1:game.W
             if game.blocks[y, x]
-                print('#')
+                print(io, '#')
             elseif game.head == Point(y, x)
-                print('H')
+                print(io, 'H')
             elseif game.body[y, x]
-                print('@')
+                print(io, '@')
             elseif game.apple == Point(y, x)
-                print('F')
+                print(io, 'F')
             else
-                print(' ')
+                print(io, ' ')
             end
         end
-        print('\n')
+        print(io, '\n')
     end
 end
 
