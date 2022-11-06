@@ -32,7 +32,11 @@ mutable struct SnakeGame
     const H::Integer
     "width"
     const W::Integer
-    "set to `true` after first reset"
+    "Observable states, see `get_state`"
+    const STATE_SPACE
+    "The possible actions are UP, DOWN, LEFT and RIGHT"
+    const ACTION_SPACE
+    "is set to `true` after first reset"
     initialized::Bool
     "tiles blocked with obstacles"
     blocks::BitMatrix
@@ -46,8 +50,18 @@ mutable struct SnakeGame
     tail::Point
     "apple (food) location"
     apple::Point
-    function SnakeGame(H::Integer = 6, W::Integer = 12)
-        return new(H, W, false)
+    function SnakeGame(H::Integer, W::Integer)
+        if H < 3
+            throw(DomainError(H, "Minimum height is 3."))
+        end
+        if W < 5
+            throw(DomainError(W, "Minimum width is 5."))
+        end
+        "The observable state is described by 8 bits, but shifted to positive numbers"
+        STATE_SPACE = 1:2^8
+        "The possible actions are UP, DOWN, LEFT and RIGHT"
+        ACTION_SPACE = [UP, DOWN, LEFT, RIGHT]
+        return new(H, W, STATE_SPACE, ACTION_SPACE, false)
     end
 end
 
@@ -56,7 +70,7 @@ end
 
 Reset environment to random valid starting state. Returns current (observed) state.
 """
-function reset!(env::SnakeGame)
+function reset!(env::SnakeGame)::Integer
     env.initialized = true
 
     env.blocks = falses(env.H, env.W)
@@ -68,8 +82,8 @@ function reset!(env::SnakeGame)
     env.directions = fill(RIGHT, env.H, env.W)
     
     env.body = falses(env.H, env.W)
-    start_y = env.H ÷ 2
-    start_x = env.W ÷ 2
+    start_y = env.H ÷ 2 + 1
+    start_x = env.W ÷ 2 + 1
     env.head = Point(start_y, start_x)
     env.body[env.head] = true
     env.tail = env.head + LEFT
@@ -113,6 +127,8 @@ end
     get_state(game::SnakeGame)::Integer
 
 Return observable game state encoded as `Integer`. Note that this may not fully describe the environment.
+
+Returned value will be positive so it can be used as an index.
 """
 function get_state(game::SnakeGame)::Integer
     blocks = []
@@ -128,7 +144,9 @@ function get_state(game::SnakeGame)::Integer
     food_right = dx > 0
 
     state_parts = [blocks..., food_up, food_down, food_left, food_right]
-    return evalpoly(2, state_parts)
+    # although the 0 state is not reachable in standard game adding the one makes
+    # this more bulletproof
+    return evalpoly(2, state_parts) + 1
 end 
 
 """
@@ -159,4 +177,16 @@ function step!(game::SnakeGame, action::Action)::Tuple{Integer, Real, Bool}
         game.tail = game.tail + game.directions[game.tail]
         return get_state(game), -0.1, false
     end
+end
+
+
+"""
+    step!(game::SnakeGame, action::Integer)::Tuple{Integer, Real, Bool}
+
+Move one step in the environment with the action given by index `action`. Returns (next_state, reward, done).
+
+Equivalent to `step!(game, ACTION_SPACE[action])`.
+"""
+function step!(game::SnakeGame, action::Integer)::Tuple{Integer, Real, Bool}
+    return step!(game, game.ACTION_SPACE[action])
 end

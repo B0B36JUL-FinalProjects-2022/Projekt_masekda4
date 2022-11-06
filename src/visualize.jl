@@ -14,7 +14,7 @@ function sprint_action(env::SnakeGame, action::Integer)::String
 end
 
 
-function display_game(env, agent; max_steps=nothing)
+function display_game!(env, agent; max_steps=nothing)
     "Episode return (total reward)"
     G = 0
     state = reset!(env)
