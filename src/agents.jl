@@ -21,8 +21,10 @@ struct MonteCarloAgent
         new(zeros(s, a), zeros(s, a))
     end
 end
+
 """Table based agent capable of online 1-step learning."""
 abstract type OnlineAgent end
+
 """Q-Learning (1-step off-policy Expected SARSA) based agent.""" 
 struct QLearningAgent <: OnlineAgent 
     Q::Matrix
@@ -32,6 +34,7 @@ struct QLearningAgent <: OnlineAgent
         new(zeros(s, a))
     end
 end
+
 """SARSA (1-step on-policy) based agent.""" 
 struct SarsaAgent <: OnlineAgent 
     Q::Matrix
@@ -42,6 +45,11 @@ struct SarsaAgent <: OnlineAgent
     end
 end
 
+"""
+    choose_action(agent, state)::Integer
+
+Return index of greedy action.
+"""
 function choose_action(agent, state)::Integer
     return argmax(agent.Q[state, :])
 end
@@ -109,6 +117,11 @@ function train_on_episode!(env, agent::OnlineAgent; max_steps, epsilon, alpha)
     return G
 end
 
+"""
+    evaluate_on_episode!(env, agent; max_steps)::Real
+
+Calculate return (total reward) on a single episode using greedy actions.
+"""
 function evaluate_on_episode!(env, agent; max_steps)::Real
     "Episode return (total reward)"
     G = 0
@@ -125,6 +138,17 @@ function evaluate_on_episode!(env, agent; max_steps)::Real
     return G
 end
 
+"""
+    train!(env, agent; episodes, max_steps, epsilon, epsilon_final=nothing, print_each=0, alpha=0.1, evaluate_each=0)
+
+Train `agent` using `env` for `episodes` episodes, where each episode has at most `max_steps` steps.
+
+Epsilon-greedy policy is used for training. If `epsilon_final` is provided linear epsilon-decay is used.
+
+`alpha` is used by some training methods as a learning rate.
+
+Non-zero `print_each` periodically prints metrics on training episodes. Non-zero `evaluate_each` periodically prints results on an evaluation episode (using greedy behavior).
+"""
 function train!(env, agent; episodes, max_steps, epsilon, epsilon_final=nothing, print_each=0, alpha=0.1, evaluate_each=0)
     eps = epsilon
     history = Real[]

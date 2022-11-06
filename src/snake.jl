@@ -1,9 +1,8 @@
 
-export SnakeGame, reset!, step!, Action, UP, DOWN, RIGHT, LEFT, STATE_SPACE, ACTION_SPACE
+export SnakeGame, reset!, step!, UP, DOWN, RIGHT, LEFT, STATE_SPACE, ACTION_SPACE
 
 Point = CartesianIndex{2}
 Direction = CartesianIndex{2}
-Action = Direction
 
 # dy, dx
 const UP = Direction(-1, 0)
@@ -153,11 +152,11 @@ function get_state(game::SnakeGame)::Integer
 end 
 
 """
-    step!(game::SnakeGame, action::Action)::Tuple{Integer, Real, Bool}
+    step!(game::SnakeGame, action::Direction)::Tuple{Integer, Real, Bool}
 
 Move one step in the environment with the given action. Returns (next_state, reward, done).
 """
-function step!(game::SnakeGame, action::Action)::Tuple{Integer, Real, Bool}
+function step!(game::SnakeGame, action::Direction)::Tuple{Integer, Real, Bool}
     next = game.head + action
     crashed = game.blocks[next] | game.body[next]
     if crashed
