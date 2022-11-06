@@ -1,5 +1,7 @@
 export display_game!
 
+sprint_action(env, action)::String = String(action)
+
 function sprint_action(env::SnakeGame, action::Integer)::String
     action = env.ACTION_SPACE[action]
     if action == UP
@@ -15,7 +17,11 @@ function sprint_action(env::SnakeGame, action::Integer)::String
     end
 end
 
+"""
+    display_game!(env, agent; max_steps=nothing)
 
+Play a single episode and print (string) visualizations.
+"""
 function display_game!(env, agent; max_steps=nothing)
     "Episode return (total reward)"
     G = 0
